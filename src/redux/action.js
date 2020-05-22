@@ -1,0 +1,55 @@
+import {DECREASE_RATING, FETCH_ADD_BOOKS, FILTER, INCREASE_RATING, LOAD_PHOTO, SEARCH_BY_NAME} from "./types";
+import {URL_BOOKS} from "./setting";
+
+export const fetchAddBooks = () => {
+  return async dispatch => {
+    try {
+      const response = await fetch(URL_BOOKS);
+      const json = await response.json();
+      dispatch({type: FETCH_ADD_BOOKS, books: json});
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
+
+export const loadPhoto = (id, url) => {
+  return async dispatch => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      dispatch({type: LOAD_PHOTO, blob, id});
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
+
+export const searchByName = (str) => {
+  return {
+    type: SEARCH_BY_NAME,
+    payload: str
+  }
+}
+
+export const increaseRating = (id) => {
+  return {
+    type: INCREASE_RATING,
+    id
+  }
+}
+
+export const decreaseRating = (id) => {
+  return {
+    type: DECREASE_RATING,
+    id
+  }
+}
+
+export const filter = (typeFilter, value) => {
+  return {
+    type: FILTER,
+    typeFilter,
+    value
+  }
+}

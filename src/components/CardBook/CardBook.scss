@@ -1,0 +1,22 @@
+.card-book {
+  width: 25%;
+}
+
+.card-book-image {
+  display: block;
+  position: relative;
+  object-fit: contain;
+  height: 300px;
+}
+
+@media screen and (max-width: 768px){
+  .card-book {
+    width: 50%;
+  }
+}
+
+@media screen and (max-width: 576px){
+  .card-book {
+    width: 100%;
+  }
+}
