@@ -1,4 +1,13 @@
-import {DECREASE_RATING, FETCH_ADD_BOOKS, FILTER, INCREASE_RATING, LOAD_PHOTO, SEARCH_BY_NAME, SORT_ARRAY} from "./types";
+import {
+  ADD_CHOSEN,
+  DECREASE_RATING, DELETE_CHOSEN,
+  FETCH_ADD_BOOKS,
+  FILTER,
+  INCREASE_RATING,
+  LOAD_PHOTO,
+  SEARCH_BY_NAME,
+  SORT_ARRAY, VIEW_CHOSEN
+} from "./types";
 import {URL_BOOKS} from "./setting";
 
 export const fetchAddBooks = () => {
@@ -58,5 +67,25 @@ export const sortBooks = (typeSort) => {
   return {
     type: SORT_ARRAY,
     typeSort
+  }
+}
+
+export const addChosen = (id) => {
+  return {
+    type: ADD_CHOSEN,
+    id
+  }
+}
+
+export const deleteChosen = (id) => {
+  return {
+    type: DELETE_CHOSEN,
+    id
+  }
+}
+
+export const viewChosen = () => {
+  return {
+    type: VIEW_CHOSEN
   }
 }

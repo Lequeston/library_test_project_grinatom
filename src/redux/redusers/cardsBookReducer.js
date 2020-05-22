@@ -1,19 +1,29 @@
 import {
   DECREASE_RATING,
-  FETCH_ADD_BOOKS, FILTER,
+  FETCH_ADD_BOOKS,
+  FILTER,
   INCREASE_RATING,
   LOAD_PHOTO,
   SEARCH_BY_NAME,
   TYPE_FILTER_AUTHOR,
   TYPE_FILTER_DATE_BIRTH_YEAR,
-  TYPE_FILTER_DEFAULT, TYPE_FILTER_INPUT_TEXT,
-  TYPE_FILTER_PUBLISHING_HOUSE, TYPE_SORT_ALPHABET, TYPE_SORT_RATING, SORT_ARRAY, TYPE_SORT_DATE
+  TYPE_FILTER_DEFAULT,
+  TYPE_FILTER_INPUT_TEXT,
+  TYPE_FILTER_PUBLISHING_HOUSE,
+  TYPE_SORT_ALPHABET,
+  TYPE_SORT_RATING,
+  SORT_ARRAY,
+  TYPE_SORT_DATE,
+  ADD_CHOSEN,
+  ARRAY_CHOSEN, DELETE_CHOSEN, VIEW_CHOSEN, TYPE_FILTER_IS_CHOSEN
 } from "../types";
 
 const ALL_VALUES = "Всё";
 
 const initialState = {
   arrayBooks: [],
+  arrayChosen: [],
+  isChosen: false,
   filters: [
     {
       name: "Выберите издательство",
@@ -54,7 +64,7 @@ const initialState = {
 }
 
 const cardsBookReducer = (state = initialState, action) => {
-  let arrayBooks, filters, sorts;
+  let arrayBooks, filters, sorts, arrayChosen, str, elem;
 
   const reverse = (flag, value) => {
     return (flag) ? value : -value;
@@ -140,6 +150,7 @@ const cardsBookReducer = (state = initialState, action) => {
       dateBirth,
       rating,
       imgLoaded: false,
+      isChosen: false,
       visible: new Map([[TYPE_FILTER_DEFAULT, true]])
     }
   };
@@ -153,7 +164,15 @@ const cardsBookReducer = (state = initialState, action) => {
         elem.options = Array.from(new Set(elem.options));
       });
       arrayBooks.sort(sortRating);
-      return {...state, arrayBooks, filters};
+      str = localStorage.getItem(ARRAY_CHOSEN);
+      if (str) {
+        arrayChosen = JSON.parse(str);
+      } else {
+        arrayChosen = [];
+      }
+      arrayChosen.forEach(elem => (arrayBooks.find(({id}) => id === elem)).isChosen = true);
+      arrayChosen = Array.from(new Set(arrayChosen));
+      return {...state, arrayBooks, filters, arrayChosen};
     case INCREASE_RATING:
       arrayBooks = ratingChange()
       if ((state.sorts.find(({type}) => type === TYPE_SORT_RATING)).isAdapt)
@@ -165,7 +184,7 @@ const cardsBookReducer = (state = initialState, action) => {
       const {id, blob} = action;
       const index = state.arrayBooks.findIndex(book => book.id === id);
       const length = state.arrayBooks.length;
-      const elem = {...state.arrayBooks[index]};
+      elem = {...state.arrayBooks[index]};
       elem.image = URL.createObjectURL(blob);
       elem.imgLoaded = true;
       arrayBooks = [...state.arrayBooks.slice(0, index), elem, ...state.arrayBooks.slice(index + 1, length)];
@@ -240,6 +259,46 @@ const cardsBookReducer = (state = initialState, action) => {
 
       return {...state, arrayBooks, sorts }
 
+    case ADD_CHOSEN:
+      str = localStorage.getItem(ARRAY_CHOSEN);
+      arrayBooks = [...state.arrayBooks];
+      if (str) {
+        arrayChosen = JSON.parse(str);
+      } else {
+        arrayChosen = [];
+      }
+      arrayChosen = [...arrayChosen, action.id];
+      arrayChosen = Array.from(new Set(arrayChosen));
+      localStorage.setItem(ARRAY_CHOSEN, JSON.stringify(arrayChosen));
+      elem = arrayBooks.findIndex(({id}) => id === action.id);
+      arrayBooks[elem] = {...arrayBooks[elem], isChosen: true};
+      return {...state, arrayBooks, arrayChosen};
+
+    case DELETE_CHOSEN:
+      str = localStorage.getItem(ARRAY_CHOSEN);
+      arrayBooks = [...state.arrayBooks];
+      if (str) {
+        arrayChosen = JSON.parse(str);
+      } else {
+        arrayChosen = [];
+      }
+      const i = arrayChosen.findIndex(elem => elem === action.id);
+      arrayChosen = [...arrayChosen.slice(0, i), ...arrayChosen.slice(i + 1, arrayChosen.length)];
+      console.log(arrayChosen);
+      localStorage.removeItem(ARRAY_CHOSEN);
+      localStorage.setItem(ARRAY_CHOSEN, JSON.stringify(arrayChosen));
+      elem = arrayBooks.findIndex(({id}) => id === action.id);
+      arrayBooks[elem] = {...arrayBooks[elem], isChosen: false, visible: arrayBooks[elem].visible.set(TYPE_FILTER_IS_CHOSEN, (!state.isChosen || false))};
+      return {...state, arrayBooks, arrayChosen};
+
+    case VIEW_CHOSEN:
+      const isChosen = !state.isChosen;
+      arrayBooks = [...state.arrayBooks];
+      arrayBooks.forEach(elem => {
+        const chosen = elem.isChosen;
+        elem.visible.set(TYPE_FILTER_IS_CHOSEN, (!isChosen || chosen));
+      });
+      return {...state, arrayBooks, isChosen}
     default:
       return state;
   }

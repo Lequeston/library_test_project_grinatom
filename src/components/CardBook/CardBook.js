@@ -2,7 +2,7 @@ import React from "react";
 import {connect, useDispatch} from 'react-redux'
 
 import "./CardBook.scss";
-import {decreaseRating, increaseRating, loadPhoto} from "../../redux/action";
+import {decreaseRating, increaseRating, loadPhoto, addChosen, deleteChosen} from "../../redux/action";
 
 const months = [
   "Января",
@@ -27,8 +27,8 @@ const states = {
   date: "Дата создания:",
   rat: "Рейтинг:"
 }
-const CardBook = ({ book, increaseRating, decreaseRating }) => {
-  const {image, information, bookName, publishingHouse, author, id, dateBirth, rating, imgLoaded} = book;
+const CardBook = ({ book, increaseRating, decreaseRating, deleteChosen, addChosen}) => {
+  const {image, information, bookName, publishingHouse, author, id, dateBirth, rating, imgLoaded, isChosen} = book;
   const dispatch = useDispatch();
 
   const getImage = () => {
@@ -39,6 +39,10 @@ const CardBook = ({ book, increaseRating, decreaseRating }) => {
       return "";
     }
   }
+
+  const buttonChosen = (!isChosen)
+    ? <button type="button" className="btn btn-secondary" onClick={() => addChosen(id)}>Доавить в избранное</button>
+    : <button type="button" className="btn btn-secondary" onClick={() => deleteChosen(id)}>Удалить из избранного</button>;
 
   return (
     <div className="col mb-4">
@@ -55,6 +59,7 @@ const CardBook = ({ book, increaseRating, decreaseRating }) => {
             <button type="button" className="btn btn-secondary" onClick={() => decreaseRating(id)}>-</button>
             <button type="button" className="btn btn-secondary" onClick={() => increaseRating(id)}>+</button>
           </div>
+          {buttonChosen}
         </div>
       </div>
     </div>
@@ -62,7 +67,7 @@ const CardBook = ({ book, increaseRating, decreaseRating }) => {
 }
 
 const mapDispatchToProps = {
-  increaseRating, decreaseRating
+  increaseRating, decreaseRating, addChosen, deleteChosen
 }
 
 export default connect(null, mapDispatchToProps)(CardBook);
