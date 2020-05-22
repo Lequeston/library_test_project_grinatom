@@ -1,4 +1,4 @@
-import {DECREASE_RATING, FETCH_ADD_BOOKS, FILTER, INCREASE_RATING, LOAD_PHOTO, SEARCH_BY_NAME} from "./types";
+import {DECREASE_RATING, FETCH_ADD_BOOKS, FILTER, INCREASE_RATING, LOAD_PHOTO, SEARCH_BY_NAME, SORT_ARRAY} from "./types";
 import {URL_BOOKS} from "./setting";
 
 export const fetchAddBooks = () => {
@@ -51,5 +51,12 @@ export const filter = (typeFilter, value) => {
     type: FILTER,
     typeFilter,
     value
+  }
+}
+
+export const sortBooks = (typeSort) => {
+  return {
+    type: SORT_ARRAY,
+    typeSort
   }
 }

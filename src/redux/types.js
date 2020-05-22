@@ -4,7 +4,7 @@ export const DECREASE_RATING = "DECREASE_RATING"; //понизить рейти�
 export const LOAD_PHOTO = "LOAD_PHOTO"; //загрузка фото
 export const SEARCH_BY_NAME = "SEARCH_BY_NAME"; //поиск по фото
 export const FILTER = "FILTER";
-export const SORT = "SORT";
+export const SORT_ARRAY = "SORT_ARRAY";
 
 export const TYPE_FILTER_PUBLISHING_HOUSE = "TYPE_FILTER_PUBLISHING_HOUSE";
 export const TYPE_FILTER_AUTHOR = "TYPE_FILTER_AUTHOR";

@@ -21,9 +21,9 @@
     "publishingHouse": "лащзлвыщазвыщзащы",
     "author": "щавщызлаывщзлазвщыл",
     "dateBirth": {
-      "year": 0,
-      "month": 0,
-      "day": 0
+      "year": 2018,
+      "month": 1,
+      "day": 1
     },
     "rating": 0
   },
@@ -31,7 +31,7 @@
     "id": 3,
     "image": "http://localhost:3000/test/image/cover.jpg",
     "information": "Жили были дед да баба",
-    "bookName": "Война и Мир",
+    "bookName": "А",
     "publishingHouse": "дом книги",
     "author": "Кирилл Логачев",
     "dateBirth": {
@@ -40,5 +40,89 @@
       "day": 2
     },
     "rating": 11
+  },
+  {
+    "id": 4,
+    "image": "http://localhost:3000/test/image/61653797_tri-mushketera-eksmo.jpg",
+    "information": "Жили были дед да баба",
+    "bookName": "Алфввыф",
+    "publishingHouse": "дом книги",
+    "author": "Кирилл Логачев",
+    "dateBirth": {
+      "year": 1998,
+      "month": 1,
+      "day": 2
+    },
+    "rating": 10
+  },
+  {
+    "id": 5,
+    "image": "http://localhost:3000/test/image/61653797_tri-mushketera-eksmo.jpg",
+    "information": "Жили были дед да баба",
+    "bookName": "Врат",
+    "publishingHouse": "дом книги",
+    "author": "Кирилл Логачев",
+    "dateBirth": {
+      "year": 1998,
+      "month": 2,
+      "day": 1
+    },
+    "rating": 10
+  },
+  {
+    "id": 6,
+    "image": "http://localhost:3000/test/image/61653797_tri-mushketera-eksmo.jpg",
+    "information": "Жили были дед да баба",
+    "bookName": "Луддввв",
+    "publishingHouse": "дом книги",
+    "author": "Кирилл Логачев",
+    "dateBirth": {
+      "year": 2020,
+      "month": 1,
+      "day": 2
+    },
+    "rating": 10
+  },
+  {
+    "id": 7,
+    "image": "http://localhost:3000/test/image/61653797_tri-mushketera-eksmo.jpg",
+    "information": "Жили были дед да баба вьдлыошщвоышщоашщыоашщвоыщшшоавыщшо",
+    "bookName": "Крата",
+    "publishingHouse": "дом книги",
+    "author": "Кирилл Логачев",
+    "dateBirth": {
+      "year": 2020,
+      "month": 1,
+      "day": 2
+    },
+    "rating": 10
+  },
+  {
+    "id": 8,
+    "image": "http://localhost:3000/test/image/61653797_tri-mushketera-eksmo.jpg",
+    "information": "Жили были дед да баба",
+    "bookName": "Яба",
+    "publishingHouse": "дом книги",
+    "author": "Кирилл Логачев",
+    "dateBirth": {
+      "year": 2020,
+      "month": 1,
+      "day": 2
+    },
+    "rating": 10
+  },
+  {
+    "id": 9,
+    "image": "http://localhost:3000/test/image/61653797_tri-mushketera-eksmo.jpg",
+    "information": "Шина",
+    "bookName": "Война и Мир",
+    "publishingHouse": "дом книги",
+    "author": "Кирилл Логачев",
+    "dateBirth": {
+      "year": 2020,
+      "month": 1,
+      "day": 2
+    },
+    "rating": 10
   }
 ]

@@ -7,7 +7,7 @@ import {
   TYPE_FILTER_AUTHOR,
   TYPE_FILTER_DATE_BIRTH_YEAR,
   TYPE_FILTER_DEFAULT, TYPE_FILTER_INPUT_TEXT,
-  TYPE_FILTER_PUBLISHING_HOUSE
+  TYPE_FILTER_PUBLISHING_HOUSE, TYPE_SORT_ALPHABET, TYPE_SORT_RATING, SORT_ARRAY, TYPE_SORT_DATE
 } from "../types";
 
 const ALL_VALUES = "Всё";
@@ -30,41 +30,75 @@ const initialState = {
       options: [ALL_VALUES],
       type: TYPE_FILTER_DATE_BIRTH_YEAR
     },
+  ],
+  sorts: [
+    {
+      name: "По дате",
+      isSortAscending: false,
+      isAdapt: false,
+      type: TYPE_SORT_DATE
+    },
+    {
+      name: "По алфавиту",
+      isSortAscending: false,
+      isAdapt: false,
+      type: TYPE_SORT_ALPHABET
+    },
+    {
+      name: "По рейтингу",
+      isSortAscending: false,
+      isAdapt: true,
+      type: TYPE_SORT_RATING
+    }
   ]
 }
 
-/*
-const sortAlphabet = (a, b) => {
-  if (a === b){
-    return 0;
-  } else {
-    let length = Math.min(a.length, b.length);
-    for (let i = 0; i < length; i++){
-      if (a[i] > b[i]) {
-        return -1;
-      } else if (a[i] < b[i]){
-        return 1;
+const cardsBookReducer = (state = initialState, action) => {
+  let arrayBooks, filters, sorts;
+
+  const reverse = (flag, value) => {
+    return (flag) ? value : -value;
+  }
+
+  const sortAlphabet = (first, second) => {
+    const elem = state.sorts.find(({type}) => type === TYPE_SORT_ALPHABET);
+    const flag = elem.isSortAscending;
+    const a = first.bookName.toLowerCase();
+    const b = second.bookName.toLowerCase();
+    if (a === b){
+      return 0;
+    } else {
+      let length = Math.min(a.length, b.length);
+      for (let i = 0; i < length; i++){
+        if (a[i] > b[i]) {
+          return reverse(flag, -1);
+        } else if (a[i] < b[i]){
+          return reverse(flag, 1);
+        }
+      }
+      if (a.length < b.length){
+        return reverse(flag, -1);
+      } else {
+        return reverse(flag, 1);
       }
     }
-    if (a.length > b.length){
-      return -1;
-    }
-    return 1;
   }
-}
 
-const sortNumber = (a, b) => {
-  return a - b;
-}
+  const sortRating = (first, second) => {
+    const a = first.rating;
+    const b = second.rating;
+    const elem = state.sorts.find(({type}) => type === TYPE_SORT_RATING);
+    const flag = elem.isSortAscending;
+    return reverse(flag, a - b);
+  }
 
-const sortDate = (first, second) => {
-  const a = new Date(first.year, first.month, first.day);
-  const b = new Date(second.year, second.month, second.day);
-  return b - a;
-}
-*/
-const cardsBookReducer = (state = initialState, action) => {
-  let arrayBooks, filters;
+  const sortDate = (first, second) => {
+    const elem = state.sorts.find(({type}) => type === TYPE_SORT_DATE);
+    const flag = elem.isSortAscending;
+    const a = new Date(first.dateBirth.year, first.dateBirth.month, first.dateBirth.day);
+    const b = new Date(second.dateBirth.year, second.dateBirth.month, second.dateBirth.day);
+    return reverse(flag, b - a);
+  }
 
   const ratingChange = () => {
     const {id, type} = action;
@@ -118,9 +152,13 @@ const cardsBookReducer = (state = initialState, action) => {
       filters.forEach(elem => {
         elem.options = Array.from(new Set(elem.options));
       });
+      arrayBooks.sort(sortRating);
       return {...state, arrayBooks, filters};
     case INCREASE_RATING:
-      return {...state, arrayBooks: ratingChange()};
+      arrayBooks = ratingChange()
+      if ((state.sorts.find(({type}) => type === TYPE_SORT_RATING)).isAdapt)
+        arrayBooks.sort(sortRating);
+      return {...state, arrayBooks };
     case DECREASE_RATING:
       return {...state, arrayBooks: ratingChange()};
     case LOAD_PHOTO:
@@ -166,6 +204,41 @@ const cardsBookReducer = (state = initialState, action) => {
 
       arrayBooks.forEach(filterBook);
       return {...state, arrayBooks};
+
+    case SORT_ARRAY:
+      const {typeSort} = action;
+      arrayBooks = [...state.arrayBooks];
+      const dropping = (type) => {
+        return state.sorts.map((elem) => {
+          let res = {...elem};
+          if (type === elem.type){
+            if (res.isAdapt){
+              res.isSortAscending = !res.isSortAscending;
+            } else {
+              res.isAdapt = true;
+            }
+          } else {
+            res.isAdapt = false;
+          }
+          return res;
+        });
+      }
+      sorts = dropping(typeSort);
+      switch (typeSort) {
+        case TYPE_SORT_ALPHABET:
+          arrayBooks.sort(sortAlphabet);
+          break;
+        case TYPE_SORT_DATE:
+          arrayBooks.sort(sortDate);
+          break;
+        case TYPE_SORT_RATING:
+          arrayBooks.sort(sortRating);
+          break;
+        default:
+          break;
+      }
+
+      return {...state, arrayBooks, sorts }
 
     default:
       return state;

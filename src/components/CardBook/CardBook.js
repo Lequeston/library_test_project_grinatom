@@ -4,9 +4,31 @@ import {connect, useDispatch} from 'react-redux'
 import "./CardBook.scss";
 import {decreaseRating, increaseRating, loadPhoto} from "../../redux/action";
 
+const months = [
+  "Января",
+  "Февраля",
+  "Марта",
+  "Апреля",
+  "Майя",
+  "Июня",
+  "Июля",
+  "Августа",
+  "Сентября",
+  "Октября",
+  "Ноября",
+  "Декабря"
+];
 
+const states = {
+  name: "Название:",
+  info: "Информация:",
+  dom: "Издательство:",
+  auth: "Автор:",
+  date: "Дата создания:",
+  rat: "Рейтинг:"
+}
 const CardBook = ({ book, increaseRating, decreaseRating }) => {
-  const {image, information, bookName, publishingHouse, author, id/*, dateBirth*/, rating, imgLoaded} = book;
+  const {image, information, bookName, publishingHouse, author, id, dateBirth, rating, imgLoaded} = book;
   const dispatch = useDispatch();
 
   const getImage = () => {
@@ -23,11 +45,12 @@ const CardBook = ({ book, increaseRating, decreaseRating }) => {
       <div className="card h-100">
         <img src={getImage()} className="card-img-top card-book-image" alt="loaded"/>
         <div className="card-body">
-          <h5 className="card-title">{bookName}</h5>
-          <p className="card-text">{information}</p>
-          <p className="card-text">{publishingHouse}</p>
-          <p className="card-text">{author}</p>
-          <p className="card-text">{rating}</p>
+          <h5 className="card-title">{`${states.name} ${bookName}`}</h5>
+          <p className="card-text">{`${states.info} ${information}`}</p>
+          <p className="card-text">{`${states.dom} ${publishingHouse}`}</p>
+          <p className="card-text">{`${states.auth} ${author}`}</p>
+          <p className="card-text">{`${states.date} ${dateBirth.day} ${months[dateBirth.month - 1]} ${dateBirth.year}`}</p>
+          <p className="card-text">{`${states.rat} ${rating}`}</p>
           <div className="btn-group">
             <button type="button" className="btn btn-secondary" onClick={() => decreaseRating(id)}>-</button>
             <button type="button" className="btn btn-secondary" onClick={() => increaseRating(id)}>+</button>
