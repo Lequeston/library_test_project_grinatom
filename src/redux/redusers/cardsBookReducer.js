@@ -284,7 +284,6 @@ const cardsBookReducer = (state = initialState, action) => {
       }
       const i = arrayChosen.findIndex(elem => elem === action.id);
       arrayChosen = [...arrayChosen.slice(0, i), ...arrayChosen.slice(i + 1, arrayChosen.length)];
-      console.log(arrayChosen);
       localStorage.removeItem(ARRAY_CHOSEN);
       localStorage.setItem(ARRAY_CHOSEN, JSON.stringify(arrayChosen));
       elem = arrayBooks.findIndex(({id}) => id === action.id);
